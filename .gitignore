@@ -1,0 +1,42 @@
+# Logs
+logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+lerna-debug.log*
+
+node_modules
+.DS_Store
+dist
+*.local
+
+# Editor directories and files
+.idea
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?
+
+.stylelintcache
+# rollup-plugin-visualizer 生成的分析文件
+stats.html
+# unplugin-auto-import 生成的类型文件
+auto-import.d.ts
+# unplugin-vue-components 生成的类型文件
+components.d.ts
+# vite-plugin-uni-pages 生成的类型文件
+uni-pages.d.ts
+
+# 插件生成的文件
+src/pages.json
+src/manifest.json
+
+# lock 文件还是不要了，我主要的版本写死就好了
+pnpm-lock.yaml
+package-lock.json
+
+# TIPS：如果某些文件已经加入了版本管理，现在重新加入 .gitignore 是不生效的，需要执行下面的操作
+# `git rm -r --cached .` 然后提交 commit 即可。
