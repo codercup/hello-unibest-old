@@ -1,7 +1,7 @@
 {
-  "name": "unibest",
+  "name": "hello-unibest",
   "version": "1.0.0",
-  "description": "unibest - 最好用的 uniapp 开发框架",
+  "description": "unibest 框架演示示例",
   "type": "commonjs",
   "author": {
     "name": "Burt",
@@ -10,8 +10,8 @@
     "github": "https://github.com/codercup",
     "gitee": "https://gitee.com/codercup"
   },
-  "repository": "https://github.com/codercup/unibest",
-  "repository-gitee": "https://gitee.com/codercup/unibest",
+  "repository": "https://github.com/codercup/hello-unibest",
+  "repository-gitee": "https://gitee.com/codercup/hello-unibest",
   "license": "MIT",
   "engines": {
     "node": ">=18",
