@@ -114,10 +114,13 @@ Copyright (c) 2024 菲鸽
 <img alt="special sponsor appwrite" src="./screenshots/pay-ali.png" width="200">
 </p>
 
-## 官方QQ群
+## 官方微信群、QQ群
 
-扫码进 QQ 群，备注 `unibest` 即可。
+- 扫码进微信群，如果群名片已过期，请进QQ群（QQ群不会过期）
+
+- 扫码进 QQ 群，备注 `unibest` 即可。
 
 <p align='center'>
+<img alt="special sponsor appwrite" src="./screenshots/wx-group.png" width="200">
 <img alt="special sponsor appwrite" src="./screenshots/qq-group.png" width="200">
 </p>
