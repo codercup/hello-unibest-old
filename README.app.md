@@ -8,3 +8,5 @@
 
 > mac 可以安装多个版本的软件，
 > ![multiple-version](./screenshots/multiple-version.png)
+
+trigger
