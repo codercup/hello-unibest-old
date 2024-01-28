@@ -32,7 +32,7 @@ jobs:
       - uses: actions/checkout@v4
       - uses: pnpm/action-setup@v2
         with:
-          version: 7.30
+          version: 7
       - uses: actions/setup-node@v4
         with:
           node-version: '18'
@@ -62,7 +62,7 @@ jobs:
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
         with:
-          path: ./out
+          path: ./dist/build/h5
 
   # Deployment job
   deploy:

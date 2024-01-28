@@ -15,6 +15,11 @@ export default defineManifestConfig({
   versionName: '1.0.0',
   versionCode: '100',
   transformPx: false,
+  h5: {
+    router: {
+      base: '/hello-unibest/',
+    },
+  },
   /* 5+App特有相关 */
   'app-plus': {
     usingComponents: true,
