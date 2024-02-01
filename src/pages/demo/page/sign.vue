@@ -84,8 +84,6 @@ function touchStart() {
 // 触摸移动，获取到路径点
 function touchMove(e) {
   if (isButtonDown) {
-    console.log(e)
-
     let movePoint = {}
     if (e.changedTouches[0].x) {
       movePoint = { X: e.changedTouches[0].x, Y: e.changedTouches[0].y }
