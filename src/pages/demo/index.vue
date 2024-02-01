@@ -1,25 +1,13 @@
 <template>
-  <view class="bg-slate-100">
-    <view class="bg-slate-100 w-full">
-      <view class="font-800 mt-4">基本功能</view>
-      <view v-for="item in baseDemos" :key="item.path" class="mt-3">
+  <view class="bg-slate-100 p-4">
+    <view class="bg-slate-100 w-full" v-for="item in listData" :key="item.id">
+      <view class="font-800">{{ item.title }}</view>
+      <view v-for="itemDetail in item.list" :key="itemDetail.path" class="mt-3">
         <view
           class="flex bg-white items-center justify-between p-3 mb-2"
-          @click="goDetailPage(item.path)"
+          @click="goDetailPage(itemDetail.path)"
         >
-          <text class="flex-1 text-4 text-dark">{{ item.title }}</text>
-          <text class="i-carbon-chevron-right"></text>
-        </view>
-      </view>
-    </view>
-    <view class="bg-slate-100 w-full">
-      <view class="font-800 mt-4">页面功能</view>
-      <view v-for="item in pageDemos" :key="item.path" class="mt-3">
-        <view
-          class="flex bg-white items-center justify-between p-3 mb-2"
-          @click="goDetailPage(item.path)"
-        >
-          <text class="flex-1 text-4 text-dark">{{ item.title }}</text>
+          <text class="flex-1 text-4 text-dark">{{ itemDetail.title }}</text>
           <text class="i-carbon-chevron-right"></text>
         </view>
       </view>
@@ -30,7 +18,6 @@
 <script setup lang="ts" name="TestIndex">
 import pagesJson from '@/pages.json'
 
-console.log(pagesJson)
 /** 基本功能 */
 const baseDemos = pagesJson.pages
   .filter((e) => e.path.startsWith('pages/demo/base'))
@@ -38,6 +25,7 @@ const baseDemos = pagesJson.pages
     title: e.style?.navigationBarTitleText || '默认页面标题',
     path: e.path,
   }))
+
 /** 页面功能 */
 const pageDemos = pagesJson.pages
   .filter((e) => e.path.startsWith('pages/demo/page'))
@@ -45,6 +33,19 @@ const pageDemos = pagesJson.pages
     title: e.style?.navigationBarTitleText || '默认页面标题',
     path: e.path,
   }))
+
+const listData = reactive([
+  {
+    id: 1,
+    title: '基础功能',
+    list: baseDemos,
+  },
+  {
+    id: 2,
+    title: '页面功能',
+    list: pageDemos,
+  },
+])
 
 const goDetailPage = (path: string) => {
   const url = `/${path}`
