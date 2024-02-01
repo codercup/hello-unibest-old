@@ -110,7 +110,7 @@ const onSubmit = () => {
   .fly-login-content {
     position: fixed;
     right: 0;
-    bottom: 0;
+    bottom: var(--window-bottom);
     left: 0;
     background-color: #fff;
     border-top-left-radius: 16px;
