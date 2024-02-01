@@ -1,15 +1,9 @@
 /* eslint-disable no-param-reassign */
 import qs from 'qs'
 import { useUserStore } from '@/store'
-import { UserInfo } from '@/typings'
+import { IResData, UserInfo } from '@/typings'
 
 type CustomRequestOptions = UniApp.RequestOptions & { query?: Record<string, any> }
-
-type Data<T> = {
-  code: number
-  msg: string
-  result: T
-}
 
 // 请求基地址
 const baseURL = import.meta.env.VITE_SERVER_BASEURL
@@ -56,7 +50,7 @@ uni.addInterceptor('uploadFile', httpInterceptor)
 
 export const http = <T>(options: CustomRequestOptions) => {
   // 1. 返回 Promise 对象
-  return new Promise<Data<T>>((resolve, reject) => {
+  return new Promise<IResData<T>>((resolve, reject) => {
     uni.request({
       ...options,
       dataType: 'json',
@@ -66,7 +60,7 @@ export const http = <T>(options: CustomRequestOptions) => {
         // 状态码 2xx，参考 axios 的设计
         if (res.statusCode >= 200 && res.statusCode < 300) {
           // 2.1 提取核心数据 res.data
-          resolve(res.data as Data<T>)
+          resolve(res.data as IResData<T>)
         } else if (res.statusCode === 401) {
           // 401错误  -> 清理用户信息，跳转到登录页
           // userStore.clearUserInfo()
@@ -76,7 +70,7 @@ export const http = <T>(options: CustomRequestOptions) => {
           // 其他错误 -> 根据后端错误信息轻提示
           uni.showToast({
             icon: 'none',
-            title: (res.data as Data<T>).msg || '请求错误',
+            title: (res.data as IResData<T>).msg || '请求错误',
           })
           reject(res)
         }
