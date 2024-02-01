@@ -109,9 +109,9 @@ function touchEnd() {
   isButtonDown = false
 }
 
-// 清空
-function clear(w?) {
-  if (w !== 1) allPoints = []
+// 清空, 传入true表示清空全部，不传传表示撤回一步
+function clear(reset?: boolean) {
+  if (reset) allPoints = []
   ctx.clearRect(0, 0, 1000, 1000)
   ctx.draw(true)
   isSigned.value = false
@@ -119,7 +119,7 @@ function clear(w?) {
 
 // 全屏
 function handFullScreen() {
-  clear()
+  clear(true)
   full.value = !full.value
   const tid = setTimeout(() => {
     onResize()
@@ -130,7 +130,7 @@ function handFullScreen() {
 // 撤回
 function withdraw() {
   // 清除画布
-  clear(1)
+  clear()
   if (allPoints.length <= 1) {
     allPoints = []
     points = []
@@ -168,7 +168,7 @@ function saveCanvasAsImage(dataURL, imageName?) {
 
 // 保存
 const save = () => {
-  if (!unref(isSigned)) {
+  if (!isSigned.value) {
     uni.showToast({
       title: '请签名',
       icon: 'none',
@@ -186,6 +186,7 @@ const save = () => {
       const name = `sign-${new Date().getTime()}`
       saveCanvasAsImage(tempFilePath, name)
       // #endif
+      console.log(res)
       // #ifndef H5
       uni.saveImageToPhotosAlbum({
         filePath: tempFilePath,
