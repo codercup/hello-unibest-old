@@ -6,15 +6,11 @@
 </route>
 
 <template>
-  <view
-    class="canvas-box flex flex-col box-border"
-    :class="full ? 'full-screen py30rpx' : 'px20rpx py20rpx'"
-  >
+  <view class="canvas-box flex flex-col box-border p-3" :class="{ 'full-screen': full }">
     <canvas
       canvas-id="canvas"
       class="w-full b b-dashed b-rd b-gray-300 canvas"
-      ref="canvasRef"
-      disable-scroll="true"
+      :disable-scroll="true"
       @touchstart="touchStart"
       @touchmove="touchMove"
       @touchend="touchEnd"
@@ -40,7 +36,6 @@
 </template>
 
 <script lang="ts" setup name="sign">
-const canvasRef = ref(null)
 const full = ref(false)
 let ctx = null
 let isButtonDown = false
@@ -48,22 +43,14 @@ let points = []
 let allPoints = []
 const isSigned = ref(false)
 
+// 初始化画布
 function initCanvas() {
-  const W = canvasRef.value.$el.offsetWidth
-  const h = canvasRef.value.$el.offsetHeight
-
-  ctx = uni.createCanvasContext('canvas', this)
+  ctx = uni.createCanvasContext('canvas')
   // 设置画笔样式
-
-  ctx.rect(0, 0, W, h)
   ctx.lineWidth = 4
   ctx.lineCap = 'round'
   ctx.lineJoin = 'round'
 }
-
-onMounted(() => {
-  initCanvas()
-})
 
 // 重设画板大小
 function onResize() {
@@ -97,7 +84,16 @@ function touchStart() {
 // 触摸移动，获取到路径点
 function touchMove(e) {
   if (isButtonDown) {
-    const movePoint = { X: e.changedTouches[0].x, Y: e.changedTouches[0].y }
+    console.log(e)
+
+    let movePoint = {}
+    if (e.changedTouches[0].x) {
+      movePoint = { X: e.changedTouches[0].x, Y: e.changedTouches[0].y }
+    } else {
+      const X = e.changedTouches[0].pageX - e.currentTarget.offsetLeft
+      const Y = e.changedTouches[0].pageY - e.currentTarget.offsetTop
+      movePoint = { X, Y }
+    }
     points.push(movePoint) // 存点
     const len = points.length
     if (len >= 2) {
@@ -127,8 +123,9 @@ function clear(w?) {
 function handFullScreen() {
   clear()
   full.value = !full.value
-  setTimeout(() => {
+  const tid = setTimeout(() => {
     onResize()
+    clearTimeout(tid)
   }, 100)
 }
 
@@ -216,6 +213,10 @@ const save = () => {
     },
   })
 }
+
+onMounted(() => {
+  initCanvas()
+})
 </script>
 
 <style lang="scss" scoped>
@@ -243,9 +244,8 @@ $padding: 30rpx;
   height: calc(100vh - 88rpx);
 
   .canvas {
-    width: calc(100% - 130rpx);
+    width: calc(100% - 100rpx);
     height: 100%;
-    margin-right: 30rpx;
     margin-left: 100rpx;
   }
 
