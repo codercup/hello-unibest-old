@@ -13,7 +13,7 @@ import UniPlatform from '@uni-helper/vite-plugin-uni-platform'
 import UniManifest from '@uni-helper/vite-plugin-uni-manifest'
 // @see https://unocss.dev/
 import UnoCSS from 'unocss/vite'
-import autoprefixer from 'autoprefixer'
+// import autoprefixer from 'autoprefixer'
 // @see https://github.com/jpkleemans/vite-svg-loader
 import svgLoader from 'vite-svg-loader'
 import { createSvgIconsPlugin } from 'vite-plugin-svg-icons'
@@ -52,7 +52,7 @@ export default ({ command, mode }) => {
         exclude: ['**/components/**/**.*'],
         routeBlockLang: 'json5', // 虽然设了默认值，但是vue文件还是要加上 lang="json5", 这样才能很好地格式化
         homePage: 'pages/index/index',
-        subPackages: ['src/pages-sub'], // 这是个数组，可以写多个
+        subPackages: ['src/pages-sub'], // 是个数组，可以配置多个
       }),
       UniLayouts(),
       UniPlatform(),
@@ -70,8 +70,10 @@ export default ({ command, mode }) => {
       }),
       vueSetupExtend(),
       AutoImport({
-        imports: ['vue'],
+        imports: ['vue', 'uni-app'],
         dts: 'src/auto-import.d.ts',
+        dirs: ['src/hooks'], // 自动导入 hooks
+        eslintrc: { enabled: true },
       }),
 
       viteCompression(),
@@ -130,13 +132,14 @@ export default ({ command, mode }) => {
       //     },
       //   }),
     ],
+
     css: {
       postcss: {
         plugins: [
-          autoprefixer({
-            // 指定目标浏览器
-            overrideBrowserslist: ['> 1%', 'last 2 versions'],
-          }),
+          // autoprefixer({
+          //   // 指定目标浏览器
+          //   overrideBrowserslist: ['> 1%', 'last 2 versions'],
+          // }),
         ],
       },
     },
@@ -150,15 +153,6 @@ export default ({ command, mode }) => {
       host: '0.0.0.0',
       hmr: true,
       port: Number.parseInt(env.VITE_APP_PORT, 10),
-      // 自定义代理规则
-      proxy: {
-        // 选项写法
-        '/api': {
-          target: 'http://localhost:6666',
-          changeOrigin: true,
-          rewrite: (path) => path.replace(/^\/api/, ''),
-        },
-      },
     },
     build: {
       minify: 'terser',
