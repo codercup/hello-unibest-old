@@ -68,6 +68,7 @@ const dh = ref(h + m / 60 + s / 3600)
 
 .clock-num {
   position: absolute;
+  transform: translateX(-250rpx);
   offset-path: path(
     'M250 125c0 69.036-55.964 125-125 125S0 194.036 0 125 55.964 0 125 0s125 55.964 125 125z'
   );
