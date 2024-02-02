@@ -1,0 +1,1 @@
+import{d as a,o as s,c as e,w as d,a as t,b as u,e as l,f as n,_ as o}from"./index-876e1fe2.js";const f=o(a({__name:"index",setup:a=>(a,o)=>{const f=l,_=n("layout-default-uni");return s(),e(_,null,{default:d((()=>[t(f,{class:""},{default:d((()=>[u("xxx yyy")])),_:1})])),_:1})}}),[["__scopeId","data-v-0fded60d"]]);export{f as default};
