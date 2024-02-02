@@ -1,12 +1,9 @@
 /* eslint-disable no-param-reassign */
+import qs from 'qs'
 import { useUserStore } from '@/store'
-import { UserInfo } from '@/typings'
+import { IResData, UserInfo } from '@/typings'
 
-type Data<T> = {
-  code: number
-  msg: string
-  result: T
-}
+type CustomRequestOptions = UniApp.RequestOptions & { query?: Record<string, any> }
 
 // 请求基地址
 const baseURL = import.meta.env.VITE_SERVER_BASEURL
@@ -15,7 +12,17 @@ const baseURL = import.meta.env.VITE_SERVER_BASEURL
 // 拦截器配置
 const httpInterceptor = {
   // 拦截前触发
-  invoke(options: UniApp.RequestOptions) {
+  invoke(options: CustomRequestOptions) {
+    // 接口请求支持通过 query 参数配置 queryString
+    if (options.query) {
+      const queryStr = qs.stringify(options.query)
+      if (options.url.includes('?')) {
+        options.url += `&${queryStr}`
+      } else {
+        options.url += `?${queryStr}`
+      }
+    }
+
     // 1. 非 http 开头需拼接地址
     if (!options.url.startsWith('http')) {
       options.url = baseURL + options.url
@@ -41,17 +48,19 @@ uni.addInterceptor('request', httpInterceptor)
 // 拦截 uploadFile 文件上传
 uni.addInterceptor('uploadFile', httpInterceptor)
 
-export const http = <T>(options: UniApp.RequestOptions) => {
+export const http = <T>(options: CustomRequestOptions) => {
   // 1. 返回 Promise 对象
-  return new Promise<Data<T>>((resolve, reject) => {
+  return new Promise<IResData<T>>((resolve, reject) => {
     uni.request({
       ...options,
+      dataType: 'json',
+      responseType: 'json',
       // 响应成功
       success(res) {
         // 状态码 2xx，参考 axios 的设计
         if (res.statusCode >= 200 && res.statusCode < 300) {
           // 2.1 提取核心数据 res.data
-          resolve(res.data as Data<T>)
+          resolve(res.data as IResData<T>)
         } else if (res.statusCode === 401) {
           // 401错误  -> 清理用户信息，跳转到登录页
           // userStore.clearUserInfo()
@@ -61,7 +70,7 @@ export const http = <T>(options: UniApp.RequestOptions) => {
           // 其他错误 -> 根据后端错误信息轻提示
           uni.showToast({
             icon: 'none',
-            title: (res.data as Data<T>).msg || '请求错误',
+            title: (res.data as IResData<T>).msg || '请求错误',
           })
           reject(res)
         }

@@ -6,7 +6,7 @@
 </route>
 
 <template>
-  <view class="canvas-box flex flex-col box-border p-3" :class="{ 'full-screen': full }">
+  <view class="canvas-box flex flex-col box-border p-3" :class="{ 'full-screen': isFullScreen }">
     <canvas
       canvas-id="canvas"
       class="w-full b b-dashed b-rd b-gray-300 canvas"
@@ -20,13 +20,13 @@
     />
     <view class="btns flex justify-between text-center box-border">
       <view class="btn-box flex">
-        <view class="btn bg-gray-100 b-rd b-gray-300 c-gray-500 p-1" @click="handFullScreen"
-          >全屏</view
-        >
+        <view class="btn bg-gray-100 b-rd b-gray-300 c-gray-500 p-1" @click="handFullScreen">
+          {{ isFullScreen ? '退出全屏' : '全屏' }}
+        </view>
         <view class="btn bg-gray-100 b-rd b-gray-300 c-gray-500 p-1 ml-2" @click="clear">清空</view>
-        <view class="btn bg-gray-100 b-rd b-gray-300 c-gray-500 p-1 ml-2" @click="withdraw"
-          >撤回</view
-        >
+        <view class="btn bg-gray-100 b-rd b-gray-300 c-gray-500 p-1 ml-2" @click="withdraw">
+          撤回
+        </view>
       </view>
       <view class="btn-box flex">
         <view class="btn bg-sky-500 b-rd c-white p-1" @click="save">保存</view>
@@ -36,12 +36,12 @@
 </template>
 
 <script lang="ts" setup name="sign">
-const full = ref(false)
+const isFullScreen = ref(false)
+const isSigned = ref(false)
 let ctx = null
 let isButtonDown = false
 let points = []
 let allPoints = []
-const isSigned = ref(false)
 
 // 初始化画布
 function initCanvas() {
@@ -109,9 +109,9 @@ function touchEnd() {
   isButtonDown = false
 }
 
-// 清空
-function clear(w?) {
-  if (w !== 1) allPoints = []
+// 清空, 传入true表示清空全部，不传传表示撤回一步
+function clear(reset?: boolean) {
+  if (reset) allPoints = []
   ctx.clearRect(0, 0, 1000, 1000)
   ctx.draw(true)
   isSigned.value = false
@@ -119,8 +119,8 @@ function clear(w?) {
 
 // 全屏
 function handFullScreen() {
-  clear()
-  full.value = !full.value
+  clear(true)
+  isFullScreen.value = !isFullScreen.value
   const tid = setTimeout(() => {
     onResize()
     clearTimeout(tid)
@@ -130,7 +130,7 @@ function handFullScreen() {
 // 撤回
 function withdraw() {
   // 清除画布
-  clear(1)
+  clear()
   if (allPoints.length <= 1) {
     allPoints = []
     points = []
@@ -168,7 +168,7 @@ function saveCanvasAsImage(dataURL, imageName?) {
 
 // 保存
 const save = () => {
-  if (!unref(isSigned)) {
+  if (!isSigned.value) {
     uni.showToast({
       title: '请签名',
       icon: 'none',
@@ -186,6 +186,7 @@ const save = () => {
       const name = `sign-${new Date().getTime()}`
       saveCanvasAsImage(tempFilePath, name)
       // #endif
+
       // #ifndef H5
       uni.saveImageToPhotosAlbum({
         filePath: tempFilePath,
@@ -194,7 +195,9 @@ const save = () => {
             title: '图片保存成功',
           })
         },
-        fail: () => {
+        fail: (err) => {
+          console.error(err)
+
           uni.showToast({
             title: '图片保存失败',
             icon: 'none',

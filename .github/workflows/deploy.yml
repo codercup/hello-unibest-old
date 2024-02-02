@@ -1,13 +1,9 @@
-# Sample workflow for building and deploying a Next.js site to GitHub Pages
-#
-# To get started with Next.js see: https://nextjs.org/docs/getting-started
-#
-name: Deploy Next.js site to Pages
+name: Deploy Pages
 
 on:
   # Runs on pushes targeting the default branch
   push:
-    branches: ['main']
+    branches: ['gh-pages']
 
   # Allows you to run this workflow manually from the Actions tab
   workflow_dispatch:
@@ -17,12 +13,6 @@ permissions:
   contents: read
   pages: write
   id-token: write
-
-# Allow only one concurrent deployment, skipping runs queued between the run in-progress and latest queued.
-# However, do NOT cancel in-progress runs as we want to allow these production deployments to complete.
-concurrency:
-  group: 'pages'
-  cancel-in-progress: false
 
 jobs:
   # Build job
@@ -37,27 +27,19 @@ jobs:
         with:
           node-version: '18'
           cache: 'pnpm'
-      - name: Setup Pages
-        uses: actions/configure-pages@v4
-        with:
-          # Automatically inject basePath in your Next.js configuration file and disable
-          # server side image optimization (https://nextjs.org/docs/api-reference/next/image#unoptimized).
-          #
-          # You may remove this line if you want to manage the configuration yourself.
-          static_site_generator: dist/build/h5
       - name: Restore cache
         uses: actions/cache@v3
         with:
           path: |
             dist/build/h5
           # Generate a new cache whenever packages or source files change.
-          key: ${{ runner.os }}-nextjs-${{ hashFiles('**/package-lock.json', '**/yarn.lock') }}-${{ hashFiles('**.[jt]s', '**.[jt]sx') }}
+          key: ${{ runner.os }}-unibest-${{ hashFiles('**/pnpm-lock.yaml') }}-${{ hashFiles('**.[jt]s', '**.[jt]sx') }}
           # If source files changed but packages didn't, rebuild from a prior cache.
           restore-keys: |
-            ${{ runner.os }}-nextjs-${{ hashFiles('**/package-lock.json', '**/yarn.lock') }}-
+            ${{ runner.os }}-unibest-${{ hashFiles('**/pnpm-lock.yaml') }}-
       - name: Install dependencies
         run: pnpm i
-      - name: Build with Next.js
+      - name: Build
         run: pnpm build:h5
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
