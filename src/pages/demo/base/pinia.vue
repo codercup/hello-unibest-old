@@ -17,6 +17,7 @@
     <view class="text-center">请观察小程序的store，可以看到是可以正常设置的</view>
     <button @click="setUserInfo">设置UserInfo</button>
     <button @click="clearUserInfo" class="mt-4">清除UserInfo</button>
+    <button @click="resetUserStore" class="mt-4">reset UserStore</button>
   </view>
 </template>
 
@@ -32,5 +33,8 @@ const setUserInfo = () => {
 }
 const clearUserInfo = () => {
   userStore.clearUserInfo()
+}
+const resetUserStore = () => {
+  userStore.reset()
 }
 </script>
