@@ -1,0 +1,1 @@
+import{G as t,a2 as a,z as s}from"./index-4a71cb36.js";import{p as e}from"./pages.8d69878b.js";const r=()=>{if(!Object.keys(e).includes("tabBar"))return!1;const a=t().at(-1).route;return!!e.tabBar.list.find((t=>t.pagePath===a))},n=()=>{s({title:"i18n 测试",content:a("app.name")})};export{r as g,n as t};
