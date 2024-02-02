@@ -23,7 +23,6 @@ import vueSetupExtend from 'vite-plugin-vue-setup-extend'
 import AutoImport from 'unplugin-auto-import/vite'
 import viteCompression from 'vite-plugin-compression'
 import ViteRestart from 'vite-plugin-restart'
-import { visualizer } from 'rollup-plugin-visualizer'
 // TIPS: 很多用户无法安装这个插件所以先注释掉了，如果您可以安装成功，那就可以放开这个注释，以及下面的viteImagemin配置
 // 注意，小程序有主包2M的限制，所以一般图片会放到图片服务器（不放本地），那就不需要这个插件
 // import viteImagemin from 'vite-plugin-imagemin'
@@ -88,14 +87,6 @@ export default ({ command, mode }) => {
           return html.replace('%BUILD_DATE%', dayjs().format('YYYY-MM-DD HH:mm:ss'))
         },
       },
-      // 打包分析插件
-      mode === 'production' &&
-        visualizer({
-          filename: './node_modules/.cache/visualizer/stats.html',
-          open: true,
-          gzipSize: true,
-          brotliSize: true,
-        }),
       // 这个图片压缩插件比较耗时，希望仅在生产环境使用
       // mode === 'production' &&
       //   viteImagemin({
