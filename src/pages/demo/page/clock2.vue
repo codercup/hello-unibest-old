@@ -1,7 +1,7 @@
 <route lang="json5">
 {
   layout: 'demo',
-  style: { navigationBarTitleText: '动态时钟' },
+  style: { navigationBarTitleText: '动态时钟-抗锯齿' },
 }
 </route>
 
@@ -12,6 +12,10 @@
       <view class="clock-pane">
         <text class="clock-num" :style="{ '--i': n }" v-for="n in 12" :key="n">{{ n }}</text>
       </view>
+      <view class="clock-scales">
+        <text class="clock-scale" :style="{ '--i': n }" v-for="n in 60" :key="n"></text>
+      </view>
+
       <view class="clock-hour"></view>
       <view class="clock-min"></view>
       <view class="clock-sec"></view>
@@ -49,22 +53,40 @@ const dh = ref(h + m / 60 + s / 3600)
   --step: 60s;
 }
 
-.clock::before {
-  position: absolute;
-  width: 300px;
-  height: 300px;
-  content: '';
-  background: repeating-conic-gradient(from -0.5deg, #333 0 1deg, transparent 0deg 30deg),
-    repeating-conic-gradient(from -0.5deg, #ccc 0 1deg, transparent 0deg 6deg);
-  border-radius: 50%;
-  mask: radial-gradient(transparent 145px, red 0);
-}
-
 .clock-pane {
   position: absolute;
   width: 250px;
   height: 250px;
   transform: translateX(-125px);
+}
+
+.clock-scales {
+  position: absolute;
+  width: 250px;
+  height: 250px;
+  transform: translate(125px, -25px);
+}
+
+.clock-scale {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 2px;
+  height: 4px;
+  background: #ccc;
+  transform-origin: 0 150px;
+
+  &:nth-child(5n + 1) {
+    width: 4px;
+    height: 6px;
+    background: #333;
+  }
+}
+
+@for $i from 1 through 60 {
+  .clock-scale:nth-child(#{$i}) {
+    transform: rotate(#{($i - 1) * 6deg});
+  }
 }
 
 .clock-num {

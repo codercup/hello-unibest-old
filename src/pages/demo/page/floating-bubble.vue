@@ -31,32 +31,31 @@
 
 <script lang="ts" setup name="FloatingBubble">
 const { windowHeight, windowWidth } = uni.getSystemInfoSync()
-console.log(uni.getSystemInfoSync())
 
 const ballSize = 60
 const x = ref(windowWidth - ballSize) // 靠右侧
 const y = ref(windowHeight - ballSize - 20) // 距离底部20px
 
 const middleX = (windowWidth - ballSize) / 2
+
 const onChange: UniHelper.MovableViewOnChange = (e) => {
-  // console.log(e.detail)
   const { x: _x, y: _y } = e.detail
   x.value = _x
   y.value = _y
 }
 // TODO: 期望最终落点不靠左右两边时，会自动回到两边，有一定的动画效果
 const onTouchEnd = (e) => {
-  console.log(e)
-  console.log('onTouchEnd')
+  console.log('onTouchEnd', e)
   // TODO：为啥这里设置的不生效了，原生不会移动到设置的地方，onSet里面可以。这里直接执行onSet也不行
-  nextTick(() => {
-    console.log(x.value, middleX)
+  // 这里被我解决了
+  const tid = setTimeout(() => {
     if (x.value < middleX) {
       x.value = 0
     } else {
       x.value = windowWidth - ballSize
     }
-  })
+    clearTimeout(tid)
+  }, 0)
 }
 
 const onClick = () => {
